@@ -34,7 +34,7 @@
             <!-- Content -->
 
    <div class="container" style="margin-top: 20px;">
-<form action="" method="post" enctype="multipart/form-data">
+<form action="{{URL('saveChanges')}}" method="post" enctype="multipart/form-data">
     <div>
     <h3>Edit Product</h3>
     </div>
@@ -98,8 +98,8 @@
   </div>
   
   @csrf
-
-    <button type="submit" class="btn btn-primary">Submit</button>
+<input type="hidden" name="id" value="{{$productValues->id}}">
+    <button type="submit" class="btn btn-primary">Save changes</button>
    
 </form>
 

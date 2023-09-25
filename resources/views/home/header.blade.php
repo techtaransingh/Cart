@@ -6,7 +6,7 @@
                     <div class="header__top__left">
                         <ul>
                             <li><i class="fa fa-envelope"></i> hello@taran.com</li>
-                            <li>Free Shipping for all Order of Rs 500</li>
+                            <li>Free Shipping for all Orders of Rs 500</li>
                         </ul>
                     </div>
                 </div>
@@ -20,8 +20,15 @@
                         </div>
 
                         <div class="header__top__right__auth">
+                            <?php if(empty($loggedIn->id)){?>
                             <a href="{{URL('login')}}"><i class="fa fa-user"></i> Login</a>
+                            <?php }else{?>
+
+                            <p>{{$loggedIn->name}}</p>
+                            <a href="{{URL('logout')}}"><i class="fa fa-user"></i> Logout</a>
+                            <?php } ?>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -59,7 +66,7 @@
                         <li><a href="{{URL('viewCart')}}"><i class="fa fa-shopping-bag"></i>
                                 <span>{{$cartCount}}</span></a></li>
                     </ul>
-                    <div class="header__cart__price">item: <span>$150.00</span></div>
+                    <div class="header__cart__price">item: <span>₹{{$total}}</span></div>
                 </div>
             </div>
         </div>

@@ -24,6 +24,16 @@
 </head>
 
 <body>
+    <?php
+if($message = session('message')){?>
+    <div class="alert alert-success">
+
+        <p class="text-center"><?php echo $message;?></p>
+    </div>
+    <?php  
+}
+
+?>
     <!-- Page Preloder -->
     <div id="preloder">
         <div class="loader"></div>

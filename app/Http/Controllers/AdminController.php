@@ -13,7 +13,7 @@ class AdminController extends Controller
     {
         $loggedIn = Auth::user();
 
-        return view('admin.home');
+        return view('admin.home', ['loggedIn' => $loggedIn]);
     }
     public function viewCategory(Request $request)
     {
@@ -109,6 +109,22 @@ class AdminController extends Controller
         return view('admin.editProduct', ['categories' => $categories, 'productValues' => $productValues]);
 
 
+    }
+    public function saveChanges(Request $request)
+    {
+        // echo $request->id;
+        $productUpdated = Product::find($request->id);
+        $productUpdated->name = $request->name;
+        $productUpdated->price = $request->price;
+        $productUpdated->description = $request->description;
+        $productUpdated->category_id = $request->category_id;
+        if ($request->hasFile('image')) {
+            $image = time() . '.' . $request->file('image')->extension();
+            $request->file('image')->move(public_path('images'), $image);
+            $productUpdated->image = $image;
+        }
+        $productUpdated->save();
+        return redirect('listProducts')->with('success', 'Changes saved.');
     }
 
 }

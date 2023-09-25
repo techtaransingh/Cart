@@ -42,7 +42,12 @@ Route::get('/listProducts', [AdminController::class, 'listProducts']);
 Route::get('/deleteProduct/{id}', [AdminController::class, 'deleteProduct']);
 Route::get('/shoppingCart/{id}', [HomeController::class, 'shoppingCart']);
 Route::get('/viewCart', [HomeController::class, 'viewCart']);
+Route::post('/updateCart', [HomeController::class, 'updateCart']);
 
+Route::get('/checkout', [HomeController::class, 'checkout']);
+Route::get('/logout', [HomeController::class, 'logout']);
+
+Route::post('/saveChanges', [AdminController::class, 'saveChanges']);
 
 
 Route::post('/editProduct', [AdminController::class, 'editProduct']);

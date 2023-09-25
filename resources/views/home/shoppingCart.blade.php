@@ -56,13 +56,19 @@
         </div>
     </section>
     <!-- Breadcrumb Section End -->
+    <?php if(isset($cartMessage)){ ?>
+    <div class="text-center mt-5">
+        <h4 class="text-danger"><?php echo $cartMessage;?></h4>
 
+    </div>
+    <?php } ?>
     <!-- Shoping Cart Section Begin -->
     <section class="shoping-cart spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="shoping__cart__table">
+
                         <table>
                             <thead>
                                 <tr>
@@ -74,73 +80,60 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="shoping__cart__item">
-                                        <img src="home/img/cart/cart-1.jpg" alt="">
-                                        <h5>Vegetable’s Package</h5>
-                                    </td>
-                                    <td class="shoping__cart__price">
-                                        $55.00
-                                    </td>
-                                    <td class="shoping__cart__quantity">
-                                        <div class="quantity">
+
+                                <form action="{{URL('updateCart')}}" method="post">
+                                    @csrf
+                                    <?php
+
+                                foreach ($cartData as $val) {
+                                    // print_r($val);
+                                    
+                                        foreach($val->getProducts as $productValue){
+                                            
+                                        ?>
+                                    <tr>
+
+                                        <td class="shoping__cart__item">
+                                            <img src="{{URL('images',$productValue->image)}}" width="80px" alt="">
+                                            <h5>{{$productValue->name}}</h5>
+                                        </td>
+                                        <td class="shoping__cart__price">
+                                            {{$productValue->price}}
+                                        </td>
+
+                                        <td class="shoping__cart__quantity">
+                                            <select class="form-select" name="quantity[]"
+                                                aria-label="Default select example">
+                                                <!-- <option selected>Open this select menu</option> -->
+                                                <option selected value="{{$val->quantity}}">{{$val->quantity}}
+                                                </option>
+                                                <option value="0">0 (Delete)</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                            <input type="hidden" name="product_id[]" value="{{ $val->product_id }}">
+                                            <!-- <div class="quantity">
                                             <div class="pro-qty">
-                                                <input type="text" value="1">
+                                                <input type="text" value="$val->quantity">
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="shoping__cart__total">
-                                        $110.00
-                                    </td>
-                                    <td class="shoping__cart__item__close">
-                                        <span class="icon_close"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="shoping__cart__item">
-                                        <img src="home/img/cart/cart-2.jpg" alt="">
-                                        <h5>Fresh Garden Vegetable</h5>
-                                    </td>
-                                    <td class="shoping__cart__price">
-                                        $39.00
-                                    </td>
-                                    <td class="shoping__cart__quantity">
-                                        <div class="quantity">
-                                            <div class="pro-qty">
-                                                <input type="text" value="1">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="shoping__cart__total">
-                                        $39.99
-                                    </td>
-                                    <td class="shoping__cart__item__close">
-                                        <span class="icon_close"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="shoping__cart__item">
-                                        <img src="home/img/cart/cart-3.jpg" alt="">
-                                        <h5>Organic Bananas</h5>
-                                    </td>
-                                    <td class="shoping__cart__price">
-                                        $69.00
-                                    </td>
-                                    <td class="shoping__cart__quantity">
-                                        <div class="quantity">
-                                            <div class="pro-qty">
-                                                <input type="text" value="1">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="shoping__cart__total">
-                                        $69.99
-                                    </td>
-                                    <td class="shoping__cart__item__close">
-                                        <span class="icon_close"></span>
-                                    </td>
-                                </tr>
+                                        </div> -->
+                                        </td>
+                                        <td class="shoping__cart__total">
+                                            ₹{{$val->price}}
+                                        </td>
+
+                                    </tr>
+                                    <?php
+                                        }
+                                 }?>
+
+
+
                             </tbody>
+
                         </table>
                     </div>
                 </div>
@@ -148,32 +141,33 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="shoping__cart__btns">
-                        <a href="#" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-                        <a href="#" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
-                            Upadate Cart</a>
+                        <a href="/" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
+
+                        <button type="submit" class="primary-btn cart-btn cart-btn-right">Update Cart</button>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="shoping__continue">
-                        <div class="shoping__discount">
-                            <h5>Discount Codes</h5>
-                            <form action="#">
-                                <input type="text" placeholder="Enter your coupon code">
-                                <button type="submit" class="site-btn">APPLY COUPON</button>
-                            </form>
+                <form>
+                    <div class="col-lg-6">
+                        <div class="shoping__continue">
+                            <div class="shoping__discount">
+                                <h5>Discount Codes</h5>
+                                <form action="#">
+                                    <input type="text" placeholder="Enter your coupon code">
+                                    <button type="submit" class="site-btn">APPLY COUPON</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="shoping__checkout">
-                        <h5>Cart Total</h5>
-                        <ul>
-                            <li>Subtotal <span>$454.98</span></li>
-                            <li>Total <span>$454.98</span></li>
-                        </ul>
-                        <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
+                    <div class="col-lg-6">
+                        <div class="shoping__checkout">
+                            <h5>Cart Total</h5>
+                            <ul>
+                                <!-- <li>Subtotal <span>$454.98</span></li> -->
+                                <li>Total <span> ₹{{$total}}</span></li>
+                            </ul>
+                            <a href="{{URL('checkout')}}" class="primary-btn">PROCEED TO CHECKOUT</a>
+                        </div>
                     </div>
-                </div>
             </div>
         </div>
     </section>

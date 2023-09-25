@@ -24,7 +24,32 @@
                         <ul class="featured__item__pic__hover">
                             <li><a href="#"><i class="fa fa-heart"></i></a></li>
                             <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                            <li><a href="{{URL('shoppingCart',$val->id)}}"><i class="fa fa-shopping-cart"></i></a></li>
+                            <?php
+
+   if (in_array($val->id,$cart_product_id)) {
+    
+       ?>
+
+                            <!-- <li> -->
+
+                            <li><a href="{{URL('viewCart')}}"><i class="fa fa-shopping-bag"></i>
+                                    <span>{{$cartCount}}</span></a></li>
+
+                            <!-- <button disabled>
+                                    <i class="fa fa-shopping-cart"></i>
+                                </button>
+                            </li> -->
+                            <?php
+   } else {
+       
+       ?>
+                            <li><a href="{{URL('shoppingCart', $val->id)}}"><i class="fa fa-shopping-cart"></i></a></li>
+                            <?php
+   }
+
+?>
+
+
                         </ul>
                     </div>
                     <div class="featured__item__text">
