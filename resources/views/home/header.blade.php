@@ -62,7 +62,11 @@
             <div class="col-lg-3">
                 <div class="header__cart">
                     <ul>
-                        <!-- <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li> -->
+                        @if(isset($loggedIn))
+                        @if($loggedIn->is_admin == 1)
+                        <li><a href="{{URL('adminpanel')}}">Admin Panel</a></li>
+                        @endif
+                        @endif
                         <li><a href="{{URL('viewCart')}}"><i class="fa fa-shopping-bag"></i>
                                 <span>{{$cartCount}}</span></a></li>
                     </ul>

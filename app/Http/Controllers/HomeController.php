@@ -12,22 +12,35 @@ class HomeController extends Controller
 {
     public function homeIndex()
     {
-        $loggedIn = Auth::user();
-
-        $products = Product::all();
+        $products = Product::paginate(4);
         $categories = Category::all();
-        $cart_product_id = [];
-        $cart = Cart::all();
+
+        $cart = Cart::where('user_id', NULL)->get();
         $cartCount = 0;
         $total = 0;
-        foreach ($cart as $val) {
-            $cart_product_id[] = $val->product_id;
-            $cartCount = $val->quantity + $cartCount;
-            $total = $total + $val->price;
+        if (!empty(Auth::user())) {
+            $cart_product_id = [];
+            $loggedIn = Auth::user();
+
+            $loggedInId = Auth::user()->id;
+            $cartData = Cart::where('user_id', $loggedInId)->get();
+            foreach ($cartData as $val) {
+                $cart_product_id[] = $val->product_id;
+                $cartCount = $val->quantity + $cartCount;
+                $total = $total + $val->price;
+            }
+
+        } else {
+            $cartData = Cart::where('user_id', NULL)->get();
+            $loggedIn = null;
+            $cart_product_id = [];
+            foreach ($cartData as $val) {
+                $cart_product_id[] = $val->product_id;
+                $cartCount = $val->quantity + $cartCount;
+                $total = $total + $val->price;
+            }
         }
-        // $cartCount = $cart->count();
-        // print_r($cart_product_id);
-        // die;
+
         return view('home.home', [
             'products' => $products,
             'categories' => $categories,
@@ -42,13 +55,19 @@ class HomeController extends Controller
     {
 
         $productIdSaved = new Cart;
-        // print_r($productIdSaved);
         $productIdSaved->product_id = $id;
         $productIdSaved->quantity = 1;
         $product = Product::find($id);
         $productIdSaved->product_name = $product->name;
         $productIdSaved->price = $product->price;
         $productIdSaved->image = $product->image;
+
+        if (!empty(Auth::user())) {
+            $productIdSaved->user_id = Auth::user()->id;
+            $productIdSaved->name = Auth::user()->name;
+            $productIdSaved->email = Auth::user()->email;
+
+        }
 
         $productIdSaved->save();
 
@@ -57,15 +76,29 @@ class HomeController extends Controller
     }
     public function viewCart()
     {
-        $loggedIn = Auth::user();
-
-        $cartData = Cart::all();
         $cartCount = 0;
         $total = 0;
-        foreach ($cartData as $val) {
-            $cart_product_id[] = $val->product_id;
-            $cartCount = $val->quantity + $cartCount;
-            $total = $total + $val->price;
+
+        if (!empty(Auth::user())) {
+            $loggedIn = Auth::user();
+
+            $cartData = Cart::where('user_id', $loggedIn->id)->get();
+            $cart_product_id = [];
+            foreach ($cartData as $val) {
+                $cart_product_id[] = $val->product_id;
+                $cartCount = $val->quantity + $cartCount;
+                $total = $total + $val->price;
+            }
+        } else {
+            $cartData = Cart::where('user_id', NULL)->get();
+            $loggedIn = null;
+            $cart_product_id = [];
+            foreach ($cartData as $val) {
+                $cart_product_id[] = $val->product_id;
+                $cartCount = $val->quantity + $cartCount;
+                $total = $total + $val->price;
+            }
+
         }
         // die;
         if ($cartCount == 0) {
@@ -73,6 +106,7 @@ class HomeController extends Controller
             return view('home.shoppingCart', [
                 'cartMessage' => $cartMessage,
                 'cartCount' => $cartCount,
+                'loggedIn' => $loggedIn,
                 'cartData' => $cartData,
                 'total' => $total
             ]);
@@ -114,7 +148,13 @@ class HomeController extends Controller
     }
     public function checkout(Request $request)
     {
-        Cart::truncate();
+        if (!empty(Auth::user())) {
+            $loggedInId = Auth::user()->id;
+            $clearCart = Cart::where('user_id', $loggedInId);
+            $clearCart->delete();
+        }
+
+
         return redirect('/')->with('message', 'Order placed successfully.');
     }
     public function logout()

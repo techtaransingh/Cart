@@ -165,7 +165,12 @@
                                 <!-- <li>Subtotal <span>$454.98</span></li> -->
                                 <li>Total <span> ₹{{$total}}</span></li>
                             </ul>
+                            @if(!empty($loggedIn))
                             <a href="{{URL('checkout')}}" class="primary-btn">PROCEED TO CHECKOUT</a>
+                            @else
+                            <a href="{{URL('login')}}" class="primary-btn">PROCEED TO CHECKOUT</a>
+
+                            @endif
                         </div>
                     </div>
             </div>

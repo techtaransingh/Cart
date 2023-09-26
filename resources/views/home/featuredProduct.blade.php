@@ -62,5 +62,9 @@
 
 
         </div>
+        <div class="pagination"
+            style="margin-top:45px;padding-top:20px;text-align:center;display:flex;justify-content:center;align-items:center">
+            {{ $products->links('pagination::bootstrap-4') }}
+        </div>
     </div>
 </section>
